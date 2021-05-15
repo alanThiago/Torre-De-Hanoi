@@ -19,6 +19,9 @@ Disco* criarDisco(int tam);
 Disco* pop(Pino *pinos, int pos);
 int push(Pino *pinos, Disco *disco, int pos);
 int moverDisco(Pino *pinos, int pinoOri, int pinoDest);
-void imprimir(Pino *pinos);
+void imprimir(Pino *pinos, int numPinos, int numDiscos);
+void imprimirDisco(int tam, int numDiscos);
+int buscarDisco(int nivel, Pino *pino);
+void jogar();
 
 #endif
