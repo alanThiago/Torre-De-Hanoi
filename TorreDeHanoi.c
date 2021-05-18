@@ -1,13 +1,13 @@
 #include "TorreDeHanoi.h"
 
 struct Disco{
-    struct Disco *next;
-    char tam;
+    Disco *next; //ponteiro para o proximo disco
+    char tamDisco; //tamanho do disco
 };
 
 struct Pino{
-    Disco *topo;
-    char qddDiscos;
+    Disco *topo; //ponteiro para o topo da pilha
+    char numDiscos; //quantidade de discos
 };
 
 Pino* criarPinos(int n){
@@ -17,62 +17,62 @@ Pino* criarPinos(int n){
 
     for(int i = 0; i < n; i++){
         pinos[i].topo = NULL;
-        pinos[i].qddDiscos = 0;
+        pinos[i].numDiscos = 0;
     }
 
     return pinos;
 }
 
-Disco* criarDisco(int tam){
+Disco* criarDisco(int tamDisco){
     Disco *disco = malloc(sizeof(Disco));
 
     if(!disco) exit(1);
 
-    disco->tam = tam;
+    disco->tamDisco = tamDisco;
     return disco;
 }
 
-void push(Pino *pinos, Disco *disco, int pos){
-    disco->next = pinos[pos].topo;
-    pinos[pos].topo = disco;
-    pinos[pos].qddDiscos++;
+void push(Pino *pinos, Disco *disco, int indice){
+    disco->next = pinos[indice].topo;
+    pinos[indice].topo = disco;
+    pinos[indice].numDiscos++;
 }
 
-Disco* pop(Pino *pinos, int pos){
-    if(pinos[pos].topo == NULL) return NULL;
-    Disco *disco = pinos[pos].topo;
-    pinos[pos].topo = disco->next;
-    pinos[pos].qddDiscos--;
+Disco* pop(Pino *pinos, int indice){
+    if(pinos[indice].topo == NULL) return NULL;
+    Disco *disco = pinos[indice].topo;
+    pinos[indice].topo = disco->next;
+    pinos[indice].numDiscos--;
     return disco;
 }
 
 int moverDisco(Pino *pinos, int origem, int destino){
     if(pinos[origem].topo == NULL) return 0;
-    if(pinos[destino].topo && pinos[origem].topo->tam > pinos[destino].topo->tam) return 0;
+    if(pinos[destino].topo && pinos[origem].topo->tamDisco > pinos[destino].topo->tamDisco) return 0;
     Disco *tmp = pop(pinos, origem);
     push(pinos, tmp, destino);
 
     return 1;
 }
 
-void imprimirDisco(int tam, int numDiscos){
+void imprimirDisco(int tamDisco, int numDiscos){
     int i;
-    numDiscos -= tam;
+    numDiscos -= tamDisco;
 
     for(i = 0; i <= numDiscos; i++) printf(" ");
-    for(i = 0; i < tam; i++) printf("_");
+    for(i = 0; i < tamDisco; i++) printf("_");
     printf("|");
-    for(i = 0; i < tam; i++) printf("_");
+    for(i = 0; i < tamDisco; i++) printf("_");
     for(i = 0; i <= numDiscos; i++) printf(" ");
 }
 
 int buscarDisco(int nivel, Pino *pino){
-    if(nivel <= pino->qddDiscos){
+    if(nivel <= pino->numDiscos){
         Disco *disco = pino->topo;
-        char qddDiscos = pino->qddDiscos;
-        while(nivel++ < qddDiscos)
+        char numDiscos = pino->numDiscos;
+        while(nivel++ < numDiscos)
             disco = disco->next;
-        return disco->tam;
+        return disco->tamDisco;
     }
     return 0;
 }
@@ -113,7 +113,7 @@ void desalocar(Pino *pinos, int numPinos){
             free(tmp2);
         }
     }
-    free(Pino);
+    free(pinos);
 }
 
 void jogar(){
@@ -134,7 +134,7 @@ void jogar(){
     for(int i = numDiscos; i > 0; i--)
         push(pinos, criarDisco(i), 0);
 
-    while(!(destino > 0 && pinos[destino].qddDiscos == numDiscos)){
+    while(!(destino > 0 && pinos[destino].numDiscos == numDiscos)){
         imprimir(pinos, numPinos, numDiscos);
         printf("Insira os pinos de origem e de destino: ");
         scanf("%d %d", &origem, &destino);
@@ -146,4 +146,5 @@ void jogar(){
 
     imprimir(pinos, numPinos, numDiscos);
     printf("PARABENS VOCE CONSEGUIU\nTOTAL DE JOGADAS: %d\n", numJogadas);
+    desalocar();
 }
