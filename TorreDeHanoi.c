@@ -1,5 +1,15 @@
 #include "TorreDeHanoi.h"
 
+struct Disco{
+    struct Disco *next;
+    char tam;
+};
+
+struct Pino{
+    Disco *topo;
+    char qddDiscos;
+};
+
 Pino* criarPinos(int n){
     Pino *pinos = (Pino*) malloc(n*sizeof(Pino));
     
@@ -22,11 +32,10 @@ Disco* criarDisco(int tam){
     return disco;
 }
 
-int push(Pino *pinos, Disco *disco, int pos){
+void push(Pino *pinos, Disco *disco, int pos){
     disco->next = pinos[pos].topo;
     pinos[pos].topo = disco;
     pinos[pos].qddDiscos++;
-    return 1;
 }
 
 Disco* pop(Pino *pinos, int pos){
@@ -90,6 +99,21 @@ void imprimir(Pino *pinos, int numPinos, int numDiscos){
         for(j = 0; j < numDiscos; j++) printf(" ");
     }
     printf("\n\n");
+}
+
+void desalocar(Pino *pinos, int numPinos){
+    Disco *tmp1, *tmp2;
+    int i;
+
+    for(i = 0; i < numPinos; i++){
+        tmp1 = pinos[i].topo;
+        while(tmp1){
+            tmp2 = tmp1;
+            tmp1 = tmp1->next;
+            free(tmp2);
+        }
+    }
+    free(Pino);
 }
 
 void jogar(){
