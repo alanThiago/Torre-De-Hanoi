@@ -146,5 +146,5 @@ void jogar(){
 
     imprimir(pinos, numPinos, numDiscos);
     printf("PARABENS VOCE CONSEGUIU\nTOTAL DE JOGADAS: %d\n", numJogadas);
-    desalocar();
+    desalocar(pinos, numPinos);
 }
